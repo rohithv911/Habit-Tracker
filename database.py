@@ -60,11 +60,33 @@ def initialize_database():
 
 def seed_tasks():
     with get_connection() as conn:
+        default_names = [name for name, category in DEFAULT_TASKS]
+
+        # Deactivate tasks that are no longer part of the current task list
+        if default_names:
+            placeholders = ",".join("?" for _ in default_names)
+            conn.execute(
+                f"""
+                UPDATE tasks
+                SET active = 0
+                WHERE name NOT IN ({placeholders})
+                """,
+                default_names,
+            )
+
+        # Add new tasks and reactivate current tasks
         for name, category in DEFAULT_TASKS:
             exists = conn.execute(
-                "SELECT 1 FROM tasks WHERE name = ? LIMIT 1", (name,)
+                "SELECT 1 FROM tasks WHERE name = ? LIMIT 1",
+                (name,),
             ).fetchone()
-            if not exists:
+
+            if exists:
+                conn.execute(
+                    "UPDATE tasks SET active = 1, category = ? WHERE name = ?",
+                    (category, name),
+                )
+            else:
                 conn.execute(
                     "INSERT INTO tasks (name, category) VALUES (?, ?)",
                     (name, category),
