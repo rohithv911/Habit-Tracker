@@ -4,11 +4,16 @@ from pathlib import Path
 DATABASE_PATH = Path(__file__).parent / "data" / "consistency.db"
 
 DEFAULT_TASKS = [
-    ("DSA Practice", "Learning"),
-    ("Workout", "Fitness"),
-    ("Job Applications", "Career"),
-    ("Pickop Development", "Project"),
-    ("Python Project", "Learning"),
+    ("Leetcode", "DSA/Interviews"),
+    ("Running/Workout", "Fitness"),
+    ("Codeforces", "Competitive Programming"),
+    ("Oats + Eggs", "Diet"),
+    ("Courses", "Upskilling"),
+    ("7 hours of academics", "Academics"),
+    ("6 hours of academics", "Academics"),
+    ("5 hours of academics", "Academics"),
+    ("Wake up before 5:30", "Personal"),
+    ("7-8 hours of sleep", "Personal"),
     ("Reading", "Personal"),
 ]
 
