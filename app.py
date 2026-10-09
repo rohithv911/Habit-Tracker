@@ -232,7 +232,7 @@ def build_editor_dataframe(tasks, saved, days_in_month):
     for task_id, name, category in tasks:
         row = {"Habit": name}
         for day in range(1, days_in_month + 1):
-            row[day] = bool(saved.get((task_id, day), False))
+            row[str(day)] = bool(saved.get((task_id, day), False))
         rows.append(row)
     return pd.DataFrame(rows)
 
@@ -358,10 +358,15 @@ if session_key not in st.session_state:
     st.session_state[session_key] = initial_df.copy()
 
 column_config = {
-    "Habit": st.column_config.TextColumn("HABITS", width="medium", disabled=True),
+    "Habit": st.column_config.TextColumn(
+        "HABITS",
+        width="medium",
+        disabled=True,
+    )
 }
+
 for day in range(1, days_in_month + 1):
-    column_config[day] = st.column_config.CheckboxColumn(
+    column_config[str(day)] = st.column_config.CheckboxColumn(
         str(day),
         help=f"Day {day}",
         default=False,
