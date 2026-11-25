@@ -303,6 +303,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -----------------------------
+# View switch (Tracker / Dashboard)
+# -----------------------------
+_, view_col, _ = st.columns([1, 1.2, 1])
+with view_col:
+    view = st.segmented_control(
+        "View", ["Tracker", "Dashboard"], default="Tracker",
+        label_visibility="collapsed", key="view",
+    ) or "Tracker"
+
+if view == "Dashboard":
+    from dashboard import render_dashboard
+    render_dashboard()
+    st.stop()
+
+# -----------------------------
 # Month selector
 # -----------------------------
 today = date.today()
