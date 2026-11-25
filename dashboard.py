@@ -176,7 +176,8 @@ def _heatmap(daily: pd.Series, year: int, month: int):
 
 def _weekly_trend(daily: pd.Series):
     weekly = daily.resample("W-SUN").mean().tail(12) * 100
-    labels = [f"{(d - timedelta(days=6)):%b %d}" for d in weekly.index]
+    labels = [f"{(d - timedelta(days=6)).strftime('%b')} {(d - timedelta(days=6)).day}" for d in weekly.index]
+    shown = labels[::-1][::2][::-1]  # every other week, always including the latest
     fig = go.Figure(go.Scatter(
         x=labels, y=weekly.values, mode="lines+markers", line=dict(color=SAGE_DARK, width=3, shape="spline"),
         marker=dict(size=9, color=PEACH, line=dict(color="#fffdf8", width=2)),
@@ -184,7 +185,8 @@ def _weekly_trend(daily: pd.Series):
         hovertemplate="Week of %{x}<br>%{y:.0f}%<extra></extra>",
     ))
     fig.update_layout(**_base_layout(260))
-    fig.update_xaxes(showgrid=False, zeroline=False, fixedrange=True, tickfont=dict(size=10, color=MUTED))
+    fig.update_xaxes(showgrid=False, zeroline=False, fixedrange=True, tickfont=dict(size=10, color=MUTED),
+                     tickmode="array", tickvals=shown, ticktext=shown, tickangle=0, automargin=True)
     fig.update_yaxes(range=[0, 105], gridcolor="#eee7d8", zeroline=False, fixedrange=True,
                      tickvals=[0, 20, 40, 60, 80, 100],
                      ticktext=["0%", "20%", "40%", "60%", "80%", "100%"],
