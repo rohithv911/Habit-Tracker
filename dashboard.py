@@ -165,9 +165,10 @@ def _heatmap(daily: pd.Series, year: int, month: int):
         xgap=5, ygap=5, showscale=False, hoverongaps=False,
         colorscale=[[0, PEACH_LIGHT], [0.45, "#eadfc9"], [0.7, SAGE], [1, SAGE_DARK]],
     ))
-    fig.update_layout(**_base_layout(60 + 52 * n_weeks))
+    fig.update_layout(**_base_layout(72 + 52 * n_weeks))
+    fig.update_layout(margin=dict(l=8, r=8, t=36, b=8))  # room for weekday labels above the grid
     fig.update_xaxes(side="top", showgrid=False, zeroline=False, fixedrange=True,
-                     tickfont=dict(size=11, color=INK), ticks="")
+                     tickfont=dict(size=11, color=INK), ticks="", automargin=True)
     fig.update_yaxes(autorange="reversed", showgrid=False, zeroline=False, visible=False,
                      fixedrange=True)
     return fig
@@ -185,7 +186,9 @@ def _weekly_trend(daily: pd.Series):
     fig.update_layout(**_base_layout(260))
     fig.update_xaxes(showgrid=False, zeroline=False, fixedrange=True, tickfont=dict(size=10, color=MUTED))
     fig.update_yaxes(range=[0, 105], gridcolor="#eee7d8", zeroline=False, fixedrange=True,
-                     ticksuffix="%", tickfont=dict(size=10, color=MUTED))
+                     tickvals=[0, 20, 40, 60, 80, 100],
+                     ticktext=["0%", "20%", "40%", "60%", "80%", "100%"],
+                     automargin=True, tickfont=dict(size=10, color=MUTED))
     return fig
 
 
